@@ -1,17 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 export const adminLogin = createAsyncThunk(
-    "loginslice/thunk",
+    "categorySlice/thunk",
     async (args) => {
-        const res= await axios.post("http://localhost:8080/api/v1/admin/login", args)
+        const res= await axios.post("http://localhost:8080/api/v1/category/create/category",args,{
+            headers:{
+                'Content-Type':"multipart/form-data"
+            }
+        })
         return res.data;
     }
 );
 
-export const loginslice = createSlice({
-    name: "loginslice",
+export const categorySlice = createSlice({
+    name: "categorySlice",
     initialState: {
-        users: [],
+        data: [],
         loading: false,
         error: null
     },
@@ -21,7 +25,6 @@ export const loginslice = createSlice({
                 state.loading = true;
             })
             .addCase(adminLogin.fulfilled, (state, action) => {
-                console.log(action,'action')
                 state.loading = false;
                 state.users = action.payload;
             })

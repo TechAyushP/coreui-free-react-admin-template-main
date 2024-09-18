@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   CButton,
@@ -21,28 +21,29 @@ import { adminLogin } from '../../../ReduxToolkit/loginslice'
 const Login = () => {
   const dispatch=useDispatch()
   const [data,setdata]=useState({})
- const navigate =  useNavigate();
+  const navigate =  useNavigate();
+  const token=localStorage.getItem("token")
 
-  // const data = useSelector((state) => {
-  //   // console.log(state.app);
-  //   return state.app
+  useEffect(()=>{
+    if (token)
+      navigate("/dashboard")
+    
+  },[])
   const handlechange=(e)=>{
     let {name,value}=e.target
     setdata({...data,[name]:value})
-   
-    
-
   }
   let handlesubmit=(e)=>{
     e.preventDefault();
     dispatch(adminLogin(data)).then((res)=>{
-      console.log(res)
       if(res.payload.success){
+        localStorage.setItem("token",res.payload.data.accessToken)
         navigate("/dashboard")
-      }else{
-        alert('somthing went wron')
-        
       }
+      // else{
+      //   alert('somthing went wrong')
+        
+      // }
     })
 
     }
@@ -67,11 +68,11 @@ const Login = () => {
                       </CInputGroupText>
 
 
-                      <CFormInput placeholder="Username" autoComplete="username"
+                      <CFormInput placeholder="Email" autoComplete=""
                       name='email'
                       onChange={handlechange}
-                      type='text'
-                      id='username'
+                      type='email'
+                      id='email'
                       required
                        />
                     </CInputGroup>
