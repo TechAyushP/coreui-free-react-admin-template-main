@@ -1,37 +1,51 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-export const adminLogin = createAsyncThunk(
-    "categorySlice/thunk",
-    async (args) => {
-        const res= await axios.post("http://localhost:8080/api/v1/category/create/category",args,{
-            headers:{
-                'Content-Type':"multipart/form-data"
-            }
-        })
-        return res.data;
+
+
+const token = window.localStorage.getItem('token');
+
+export const getcategory = createAsyncThunk(
+    "category/all",
+    async ( ) => {
+       const res = await axios.get("http://localhost:8080/api/v1/category/all/category",{
+        headers:{
+            'Content-type':'aplication/json',
+            'Acces-Control-Allow-origin': '*',
+            Authorization: `Bearer ${token}`
+        }
+       })
+       console.log(res.data,"dshisudhiuh");
+        return  res.data
     }
 );
 
-export const categorySlice = createSlice({
+  const categorySlice = createSlice({
     name: "categorySlice",
+
     initialState: {
-        data: [],
-        loading: false,
-        error: null
+        data: { },
+        isLoading: false,
+        isError: false
     },
+
     extraReducers: (builder) => {
         builder
-            .addCase(adminLogin.pending, (state) => {
-                state.loading = true;
+            .addCase(getcategory.pending, (state,action) => {
+                state.isLoading = true;
             })
-            .addCase(adminLogin.fulfilled, (state, action) => {
-                state.loading = false;
-                state.users = action.payload;
+            .addCase(getcategory.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.payload;
             })
-            .addCase(adminLogin.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message; // 
+            .addCase(getcategory.rejected, (state, action) => {  
+                state.isLoading = false;
+                state.isError = true; // 
             });
     }
 });
+
+
+
+
+export default categorySlice.reducer
 

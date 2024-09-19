@@ -50,8 +50,9 @@ const _nav = [
       
       {
         component: CNavItem,
-        name: 'Tooltips',
-        to: '/base/tooltips',
+        name: 'All Category',
+        to: '/allcategory',
+        
       },
     ],
   },
