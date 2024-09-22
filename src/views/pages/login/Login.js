@@ -20,9 +20,13 @@ import { adminLogin } from '../../../ReduxToolkit/loginslice'
 
 const Login = () => {
   const dispatch=useDispatch()
-  const [data,setdata]=useState({})
+
+
+  const [data,setdata]=useState({})    // hamne kya kara ki user jo change karega usk store karake data me store kar lia 
+
+
   const navigate =  useNavigate();
-  const token=localStorage.getItem("token")
+  const token=localStorage.getItem("token")   // validate karne ke lia ham local storege bana ke check kara lete h ki kya token mil ra h 
 
   useEffect(()=>{
     if (token)
@@ -31,12 +35,16 @@ const Login = () => {
   },[])
   const handlechange=(e)=>{
     let {name,value}=e.target
-    setdata({...data,[name]:value})
+    setdata({...data,[name]:value})  // hamne kya kara ki user jo change karega usk store karake data me store kar lia 
   }
   let handlesubmit=(e)=>{
+
     e.preventDefault();
     dispatch(adminLogin(data)).then((res)=>{
-      if(res.payload.success){
+
+      // console.log(res,'resssssssssssssssss')
+      if(res.payload.success)          //console.log(res.payload,'payload')
+      {
         localStorage.setItem("token",res.payload.data.accessToken)
         navigate("/dashboard")
       }
